@@ -12,7 +12,8 @@ I made this for my own site because a "Skills: n8n, Clay, HubSpot" line on a CV 
 2. **Make your pixel headshot.** Open `pixel.html` ([live version](https://babaliba-oss.github.io/gtm-card/pixel.html)), drop a photo, frame your face, download. Replace `avatar.png` with yours. The photo never leaves your browser.
 3. **Fill in `card.json`.** Edit it by hand, or paste [PROMPT.md](PROMPT.md) into Claude or ChatGPT with your LinkedIn profile and let it do the first draft. Then check every number.
 4. **Put it online.** Repo **Settings → Pages → Deploy from a branch → `main` / root → Save**. A minute later it's live at `https://<your-username>.github.io/<repo-name>/`.
-5. **Share it.** Post it and drop the link under [my LinkedIn post](https://www.linkedin.com/in/daniel-%C8%99fi%C8%9Ba-ab7905119). I'll look at every one.
+5. **Make the share image.** Open `og.html` on your live site, download the picture, save it as `og.png` in the repo, and change the `og:image` URL at the top of `index.html` to `https://<your-username>.github.io/<repo-name>/og.png`. That's what LinkedIn and Slack show when you share the link.
+6. **Share it.** Post it and drop the link under [my LinkedIn post](https://www.linkedin.com/in/daniel-%C8%99fi%C8%9Ba-ab7905119). I'll look at every one.
 
 ## What goes in card.json
 
@@ -63,6 +64,8 @@ index.html          the card
 card.json           your content
 avatar.png          your pixel headshot
 pixel.html          the headshot maker
+og.html             the share image maker
+og.png              your share image
 brain/              notes the card is built from
 PROMPT.md           prompt to fill in the card with AI
 scripts/            weekly update script

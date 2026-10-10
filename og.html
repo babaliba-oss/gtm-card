@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Share image maker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; min-height: 100vh; background: #070d0c; color: #e8f3f1; font-family: "Sora", system-ui, sans-serif; display: flex; justify-content: center; padding: 2rem 16px; box-sizing: border-box; }
+  main { width: min(900px, 100%); display: grid; gap: 1rem; }
+  h1 { font-size: 1.3rem; margin: 0; }
+  p { color: #93b1ae; font-size: .88rem; margin: .3rem 0 0; line-height: 1.5; }
+  code { color: #e8f3f1; }
+  canvas { width: 100%; height: auto; border-radius: 12px; border: 1px solid #22403d; display: block; }
+  button { font-family: inherit; font-weight: 600; font-size: .85rem; border-radius: 999px; padding: .6rem 1.2rem; cursor: pointer; border: none; background: #46c9cf; color: #062224; justify-self: start; }
+  a { color: #46c9cf; }
+</style>
+</head>
+<body>
+<main>
+  <div>
+    <h1>Share image maker</h1>
+    <p>This is the picture LinkedIn and Slack show when someone shares your card link. It's drawn from your <code>card.json</code> and <code>avatar.png</code>. Download it, save it as <code>og.png</code> in your repo, and put your own URL in the <code>og:image</code> line at the top of <code>index.html</code>.</p>
+  </div>
+  <canvas id="c" width="1200" height="630"></canvas>
+  <button id="dl" disabled>Download og.png</button>
+  <p><a href="index.html">← Back to the card</a></p>
+</main>
+<script>
+(function () {
+  var W = 1200, H = 630, P = 64;
+  var c = document.getElementById('c'), x = c.getContext('2d');
+
+  function wrap(text, maxW, maxLines) {
+    var words = String(text || '').split(/\s+/), lines = [], cur = '';
+    words.forEach(function (w) {
+      var t = cur ? cur + ' ' + w : w;
+      if (x.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t;
+    });
+    if (cur) lines.push(cur);
+    if (lines.length > maxLines) { lines = lines.slice(0, maxLines); lines[maxLines - 1] = lines[maxLines - 1].replace(/\s*\S*$/, '') + '…'; }
+    return lines;
+  }
+  function rr(px, py, w, h, r) { x.beginPath(); x.moveTo(px + r, py); x.arcTo(px + w, py, px + w, py + h, r); x.arcTo(px + w, py + h, px, py + h, r); x.arcTo(px, py + h, px, py, r); x.arcTo(px, py, px + w, py, r); x.closePath(); }
+
+  function draw(d, img) {
+    var accent = d.accent || '#46c9cf';
+    var g = x.createRadialGradient(W * 0.15, 0, 0, W * 0.15, 0, W);
+    g.addColorStop(0, '#13221f'); g.addColorStop(1, '#0a1211');
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+
+    // header: avatar + name
+    var av = 150;
+    if (img) {
+      x.save(); rr(P, P, av, av, 18); x.clip(); x.imageSmoothingEnabled = false; x.drawImage(img, P, P, av, av); x.restore();
+      x.strokeStyle = '#22403d'; x.lineWidth = 2; rr(P, P, av, av, 18); x.stroke();
+    }
+    var tx = img ? P + av + 32 : P;
+    x.fillStyle = '#e8f3f1'; x.font = '700 54px Sora'; x.fillText(d.name || '', tx, P + 62);
+    x.fillStyle = accent; x.font = '600 26px Sora'; x.fillText(wrap(d.role, W - tx - P, 1)[0] || '', tx, P + 104);
+    x.fillStyle = '#93b1ae'; x.font = '400 22px Sora'; x.fillText(d.location || '', tx, P + 138);
+
+    // the line
+    x.fillStyle = '#e8f3f1'; x.font = '400 28px Sora';
+    wrap(d.line, W - 2 * P, 2).forEach(function (l, i) { x.fillText(l, P, 278 + i * 40); });
+
+    // three numbers
+    var nums = (d.nums || []).slice(0, 3), gap = 22, tw = (W - 2 * P - gap * 2) / 3, ty = 352, th = 132;
+    nums.forEach(function (n, i) {
+      var px = P + i * (tw + gap);
+      x.fillStyle = '#13221f'; rr(px, ty, tw, th, 16); x.fill();
+      x.strokeStyle = '#22403d'; x.lineWidth = 2; rr(px, ty, tw, th, 16); x.stroke();
+      x.fillStyle = accent; x.font = '700 46px Sora'; x.fillText(n.b, px + 22, ty + 60);
+      x.fillStyle = '#93b1ae'; x.font = '400 19px Sora';
+      wrap(n.t, tw - 44, 2).forEach(function (l, k) { x.fillText(l, px + 22, ty + 92 + k * 25); });
+    });
+
+    // stack chips, as many as fit on one row
+    var items = []; (d.stack || []).forEach(function (s) { items = items.concat(s.items || []); });
+    x.font = '600 20px Sora'; var cx = P, cy = 528, ch = 42;
+    for (var i = 0; i < items.length; i++) {
+      var w = x.measureText(items[i]).width + 32;
+      if (cx + w > W - P - 170) break;
+      x.fillStyle = '#13221f'; rr(cx, cy, w, ch, 10); x.fill();
+      x.strokeStyle = '#22403d'; x.lineWidth = 2; rr(cx, cy, w, ch, 10); x.stroke();
+      x.fillStyle = '#e8f3f1'; x.fillText(items[i], cx + 16, cy + 28);
+      cx += w + 10;
+    }
+    x.fillStyle = '#93b1ae'; x.font = '700 16px Sora'; x.textAlign = 'right';
+    x.fillText('GTM CARD', W - P, cy + 28); x.textAlign = 'left';
+    document.getElementById('dl').disabled = false;
+  }
+
+  Promise.all([
+    fetch('card.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }),
+    document.fonts ? Promise.all(['400 20px Sora', '600 20px Sora', '700 20px Sora'].map(function (f) { return document.fonts.load(f); })) : null
+  ]).then(function (res) {
+    var d = res[0];
+    if (!d.avatar) return draw(d, null);
+    var img = new Image();
+    img.onload = function () { draw(d, img); };
+    img.onerror = function () { draw(d, null); };
+    img.src = d.avatar;
+  }).catch(function (e) { document.querySelector('p').textContent = "Couldn't read card.json: " + e.message; });
+
+  document.getElementById('dl').addEventListener('click', function () {
+    var a = document.createElement('a'); a.download = 'og.png'; a.href = c.toDataURL('image/png'); a.click();
+  });
+})();
+</script>
+</body>
+</html>

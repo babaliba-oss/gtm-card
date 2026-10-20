@@ -1,6 +1,6 @@
 {
   "name": "Daniel Șfița",
-  "role": "GTM engineering · Marketing at Claimlane",
+  "role": "GTM Automation Specialist at Claimlane",
   "location": "Copenhagen",
   "avatar": "avatar.png",
   "line": "Marketer who codes. I build the systems behind growth: data, signals, routing, tracking and outreach that run on their own.",
@@ -8,7 +8,7 @@
   "stack": [
     { "label": "Automation", "items": ["n8n", "Make", "Zapier"] },
     { "label": "GTM data", "items": ["Clay", "Apollo", "ZoomInfo", "RB2B", "Dropcontact"] },
-    { "label": "Outreach", "items": ["Instantly", "HeyReach"] },
+    { "label": "Outreach", "items": ["FirstTouch", "Instantly", "HeyReach"] },
     { "label": "CRM", "items": ["HubSpot"] },
     { "label": "AI", "items": ["Claude API", "GPT", "Gemini"] },
     { "label": "Web", "items": ["Webflow", "Cloudflare Workers", "Pages", "D1"] },
@@ -35,5 +35,5 @@
     { "label": "LinkedIn", "url": "https://www.linkedin.com/in/daniel-%C8%99fi%C8%9Ba-ab7905119" }
   ],
   "accent": "#46c9cf",
-  "updated": "2026-10-10"
+  "updated": "2026-10-20"
 }

@@ -4,7 +4,7 @@
   "location": "Copenhagen",
   "avatar": "avatar.png",
   "line": "Marketer who codes. I build the systems behind growth: data, signals, routing, tracking and outreach that run on their own.",
-  "now": ["Scoring account heat so SDRs see the hottest first", "Turning my GTM automations into public n8n templates", "Testing two demo button texts head to head"],
+  "now": ["Scoring account heat so SDRs see the hottest first", "Turning my GTM automations into public n8n templates", "Checking a new attribution tool against HubSpot"],
   "focus": ["GTM automation", "RevOps tooling", "Enrichment & routing", "Signals", "SEO & AEO", "Tracking", "Internal AI"],
   "stack": [
     { "label": "Automation", "items": ["n8n", "Make", "Zapier"] },
@@ -27,7 +27,7 @@
   "builds": [
     { "name": "Sales meeting prep agent", "what": "Calendar + HubSpot deals → Claude brief in Slack before 07:00" },
     { "name": "SDR lead screener", "what": "Research agent finds companies, code rules screen, hands off to Clay" },
-    { "name": "Website visitor routing", "what": "RB2B → Clay → ICP and CRM check → right rep's Slack" },
+    { "name": "Website intent routing", "what": "Visitors scored by fit and page heat → right rep's Slack" },
     { "name": "MS Ads offline conversions", "what": "HubSpot lifecycle and revenue back to Microsoft Ads" }
   ],
   "links": [
@@ -36,5 +36,5 @@
     { "label": "LinkedIn", "url": "https://www.linkedin.com/in/daniel-%C8%99fi%C8%9Ba-ab7905119" }
   ],
   "accent": "#46c9cf",
-  "updated": "2026-11-09"
+  "updated": "2026-11-16"
 }
